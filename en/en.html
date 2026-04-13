@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hacking Lab — MidTerm Guide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&family=Exo+2:wght@300;400;600&display=swap');
+
+  :root {
+    --bg: #0a0e17;
+    --surface: #0f1623;
+    --card: #141d2e;
+    --border: #1e2d45;
+    --green: #00ff9d;
+    --cyan: #00d4ff;
+    --orange: #ff6b35;
+    --yellow: #ffd600;
+    --red: #ff3860;
+    --text: #c8d6e5;
+    --muted: #5a6a7d;
+    --white: #e8f4fd;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Exo 2', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    padding: 0 0 80px 0;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #0a0e17 0%, #0d1929 50%, #0a0e17 100%);
+    border-bottom: 2px solid var(--green);
+    padding: 50px 40px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 60px,
+      rgba(0,255,157,0.03) 60px,
+      rgba(0,255,157,0.03) 61px
+    ), repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 60px,
+      rgba(0,255,157,0.03) 60px,
+      rgba(0,255,157,0.03) 61px
+    );
+  }
+  .header-badge {
+    display: inline-block;
+    background: rgba(0,255,157,0.1);
+    border: 1px solid var(--green);
+    color: var(--green);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    padding: 5px 16px;
+    border-radius: 2px;
+    margin-bottom: 20px;
+  }
+  .header h1 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 52px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 3px;
+    line-height: 1.1;
+    position: relative;
+  }
+  .header h1 span { color: var(--green); }
+  .header p {
+    margin-top: 14px;
+    color: var(--muted);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+
+  /* LAYOUT */
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 30px; }
+
+  /* NAV */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,14,23,0.97);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+    padding: 12px 30px;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    padding: 5px 12px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .nav a:hover { color: var(--green); border-color: var(--green); background: rgba(0,255,157,0.05); }
+
+  /* SECTION */
+  .section { margin-top: 50px; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-num {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--green);
+    background: rgba(0,255,157,0.08);
+    border: 1px solid rgba(0,255,157,0.3);
+    padding: 4px 10px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+  .section-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 1px;
+  }
+
+  /* CARDS */
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-bottom: 20px; }
+  .grid-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 22px;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: var(--cyan); }
+  .card-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--cyan);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .card ul { padding-left: 0; list-style: none; }
+  .card ul li {
+    padding: 4px 0 4px 18px;
+    position: relative;
+    color: var(--text);
+    font-size: 14px;
+    border-bottom: 1px solid rgba(30,45,69,0.5);
+  }
+  .card ul li:last-child { border-bottom: none; }
+  .card ul li::before { content: '▸'; position: absolute; left: 0; color: var(--green); font-size: 11px; top: 7px; }
+
+  /* HIGHLIGHT CARD */
+  .card.green { border-color: rgba(0,255,157,0.3); background: rgba(0,255,157,0.04); }
+  .card.green .card-title { color: var(--green); }
+  .card.orange { border-color: rgba(255,107,53,0.3); background: rgba(255,107,53,0.04); }
+  .card.orange .card-title { color: var(--orange); }
+  .card.yellow { border-color: rgba(255,214,0,0.3); background: rgba(255,214,0,0.04); }
+  .card.yellow .card-title { color: var(--yellow); }
+  .card.red { border-color: rgba(255,56,96,0.3); background: rgba(255,56,96,0.04); }
+  .card.red .card-title { color: var(--red); }
+
+  /* CODE */
+  .code-block {
+    background: #080c14;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--green);
+    border-radius: 4px;
+    padding: 16px 20px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    color: var(--green);
+    margin: 12px 0;
+    overflow-x: auto;
+    line-height: 1.8;
+  }
+  .code-block .comment { color: var(--muted); }
+  .code-block .flag { color: var(--cyan); }
+  .code-block .value { color: var(--yellow); }
+  .code-block .cmd { color: var(--orange); }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; margin: 16px 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  th {
+    background: rgba(0,255,157,0.08);
+    color: var(--green);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid rgba(0,255,157,0.3);
+  }
+  td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: top;
+  }
+  tr:hover td { background: rgba(0,212,255,0.03); }
+  td:first-child { font-family: 'Share Tech Mono', monospace; color: var(--cyan); font-size: 12px; }
+
+  /* KEY FACT */
+  .key-fact {
+    background: rgba(255,214,0,0.06);
+    border: 1px solid rgba(255,214,0,0.25);
+    border-left: 4px solid var(--yellow);
+    border-radius: 4px;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 14px;
+    color: var(--white);
+  }
+  .key-fact strong { color: var(--yellow); }
+
+  .warn {
+    background: rgba(255,56,96,0.06);
+    border: 1px solid rgba(255,56,96,0.25);
+    border-left: 4px solid var(--red);
+    border-radius: 4px;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 14px;
+    color: var(--white);
+  }
+  .warn strong { color: var(--red); }
+
+  /* TAG */
+  .tag {
+    display: inline-block;
+    background: rgba(0,212,255,0.1);
+    border: 1px solid rgba(0,212,255,0.3);
+    color: var(--cyan);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin: 2px;
+  }
+  .tag.green { background: rgba(0,255,157,0.1); border-color: rgba(0,255,157,0.3); color: var(--green); }
+  .tag.orange { background: rgba(255,107,53,0.1); border-color: rgba(255,107,53,0.3); color: var(--orange); }
+
+  /* STAGE */
+  .stages { display: flex; flex-direction: column; gap: 8px; margin: 16px 0; }
+  .stage {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px 16px;
+  }
+  .stage-num {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 22px;
+    color: var(--green);
+    min-width: 36px;
+    font-weight: bold;
+    opacity: 0.6;
+  }
+  .stage-name { font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 600; color: var(--white); }
+  .stage-desc { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+  /* DIVIDER */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+  /* FLOW */
+  .flow { display: flex; gap: 0; margin: 16px 0; flex-wrap: wrap; }
+  .flow-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 12px 16px;
+    font-size: 13px;
+    position: relative;
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+  }
+  .flow-item .label { color: var(--cyan); font-family: 'Share Tech Mono', monospace; font-size: 11px; }
+  .flow-item .val { color: var(--white); font-size: 14px; font-weight: 600; margin-top: 4px; }
+
+  /* QUICK REF */
+  .qr { background: #080c14; border: 1px solid var(--border); border-radius: 6px; padding: 20px; margin: 16px 0; }
+  .qr-title { font-family: 'Share Tech Mono', monospace; color: var(--muted); font-size: 11px; letter-spacing: 2px; margin-bottom: 14px; }
+  .qr-row { display: flex; gap: 12px; padding: 7px 0; border-bottom: 1px solid rgba(30,45,69,0.6); align-items: flex-start; flex-wrap: wrap; }
+  .qr-row:last-child { border-bottom: none; }
+  .qr-cmd { font-family: 'Share Tech Mono', monospace; color: var(--green); font-size: 12px; min-width: 280px; flex-shrink: 0; }
+  .qr-desc { color: var(--muted); font-size: 13px; }
+
+  p { margin-bottom: 10px; }
+  strong { color: var(--white); }
+
+  /* ═══════════════════════════════════════
+     MOBILE RESPONSIVE — max-width: 768px
+  ═══════════════════════════════════════ */
+  @media (max-width: 768px) {
+
+    /* Header */
+    .header {
+      padding: 32px 20px 28px;
+    }
+    .header-badge {
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      padding: 4px 10px;
+    }
+    .header h1 {
+      font-size: 36px;
+      letter-spacing: 2px;
+    }
+    .header h1:nth-child(3) {
+      font-size: 18px !important;
+      letter-spacing: 3px !important;
+    }
+    .header p { font-size: 11px; }
+
+    /* Nav — горизонтальный скролл вместо переноса */
+    .nav {
+      padding: 10px 12px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      justify-content: flex-start;
+      gap: 8px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .nav::-webkit-scrollbar { display: none; }
+    .nav a {
+      font-size: 11px;
+      padding: 7px 14px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      /* Larger tap target */
+      min-height: 36px;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Container */
+    .container { padding: 0 16px; }
+
+    /* Sections */
+    .section { margin-top: 36px; }
+    .section-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .section-title { font-size: 20px; }
+
+    /* Grid — всегда одна колонка на мобиле */
+    .grid,
+    .grid-3 {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    /* Cards */
+    .card { padding: 16px; }
+    .card-title { font-size: 14px; }
+    .card ul li { font-size: 13px; }
+
+    /* Code blocks — горизонтальный скролл */
+    .code-block {
+      font-size: 12px;
+      padding: 12px 14px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      white-space: pre;
+      word-break: normal;
+    }
+
+    /* Tables — горизонтальный скролл */
+    .table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 4px;
+    }
+    table { font-size: 12px; min-width: 480px; }
+    th { padding: 8px 10px; font-size: 10px; }
+    td { padding: 7px 10px; }
+
+    /* Quick Reference rows — вертикальный стек на мобиле */
+    .qr { padding: 14px; }
+    .qr-row {
+      flex-direction: column;
+      gap: 4px;
+      padding: 10px 0;
+    }
+    .qr-cmd {
+      min-width: unset;
+      font-size: 11px;
+      word-break: break-all;
+    }
+    .qr-desc { font-size: 12px; }
+
+    /* Stages */
+    .stage { padding: 12px 14px; gap: 10px; }
+    .stage-num { font-size: 18px; min-width: 28px; }
+    .stage-name { font-size: 14px; }
+    .stage-desc { font-size: 12px; }
+
+    /* Key fact / warn */
+    .key-fact,
+    .warn {
+      font-size: 13px;
+      padding: 12px 14px;
+    }
+    .key-fact code,
+    .warn code { font-size: 11px; word-break: break-all; }
+
+    /* Inline subtitles */
+    .section-title[style] {
+      font-size: 16px !important;
+      margin: 20px 0 12px !important;
+    }
+
+    /* Divider spacing */
+    .divider { margin: 30px 0; }
+
+    /* Stage desc code — wrap */
+    .stage-desc code { word-break: break-all; display: inline-block; }
+  }
+
+  /* ═══════════════════════════════════════
+     SMALL PHONES — max-width: 400px
+  ═══════════════════════════════════════ */
+  @media (max-width: 400px) {
+    .header h1 { font-size: 28px; }
+    .header h1:nth-child(3) { font-size: 15px !important; }
+    .card { padding: 14px; }
+    .code-block { font-size: 11px; }
+    .stage-name { font-size: 13px; }
+  }
+</style>
+<body>
+
+<div class="header">
+  <div class="header-badge">ASTANA IT UNIVERSITY · SCHOOL OF CYBERSECURITY</div>
+  <h1>HACKING <span>LAB</span></h1>
+  <h1 style="font-size:28px; color: var(--cyan); font-weight:400; letter-spacing:6px;">MIDTERM STUDY GUIDE</h1>
+  <p>// Lectures 1–4 · Complete Reference · April 2026</p>
+</div>
+
+<nav class="nav">
+  <a href="#l1">01 · Basics</a>
+  <a href="#l2">02 · OSINT</a>
+  <a href="#l3">03 · Nmap</a>
+  <a href="#l4">04 · WiFi</a>
+  <a href="#cmdref">CMD Ref</a>
+  <a href="#cheatsheet">Cheatsheet</a>
+</nav>
+
+<div class="container">
+
+<!-- LECTURE 1 -->
+<div class="section" id="l1">
+  <div class="section-header">
+    <span class="section-num">LECTURE 01</span>
+    <span class="section-title">Introduction to Hacking Lab · Kali Linux Basics</span>
+  </div>
+
+  <div class="grid">
+    <div class="card green">
+      <div class="card-title">🎯 Key Terms</div>
+      <ul>
+        <li><strong>Hacker</strong> — explores, analyzes, and manipulates systems</li>
+        <li><strong>White Hat</strong> — ethical hacker who secures systems</li>
+        <li><strong>Black Hat</strong> — malicious hacker with harmful intent</li>
+        <li><strong>Gray Hat</strong> — acts without permission but not with bad intent</li>
+        <li><strong>Vulnerability</strong> — a weakness in a system</li>
+        <li><strong>Exploit</strong> — a method to take advantage of a vulnerability</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">⚔️ Offensive Security</div>
+      <ul>
+        <li><strong>Penetration Testing</strong> — testing a system by attempting to breach it</li>
+        <li><strong>Red Teaming</strong> — long-term attacks simulating real-world threats</li>
+        <li><strong>Ethical Hacking</strong> — using hacking techniques for security purposes</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">🛡️ Defensive Security</div>
+      <ul>
+        <li><strong>Blue Teaming</strong> — infrastructure protection and threat monitoring</li>
+        <li><strong>Incident Response</strong> — analyzing and mitigating attack consequences</li>
+        <li><strong>Threat Hunting</strong> — actively searching for hackers inside a network</li>
+        <li><strong>IDS</strong> — Intrusion Detection System</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="key-fact">
+    <strong>Offensive vs Defensive:</strong> Offensive = proactive vulnerability discovery (attacking). Defensive = protection, monitoring, incident response. Both approaches are essential for comprehensive security.
+  </div>
+
+  <div class="section-title" style="font-size:18px; margin: 24px 0 14px; color: var(--cyan);">6 Stages of Penetration Testing</div>
+  <div class="stages">
+    <div class="stage"><div class="stage-num">01</div><div><div class="stage-name">Reconnaissance</div><div class="stage-desc">Gathering information about the target — OSINT, WHOIS, Google Dorking, DNS, social engineering</div></div></div>
+    <div class="stage"><div class="stage-num">02</div><div><div class="stage-name">Scanning</div><div class="stage-desc">Identifying vulnerabilities and network mapping — Nmap, Masscan, Zenmap</div></div></div>
+    <div class="stage"><div class="stage-num">03</div><div><div class="stage-name">Gaining Access</div><div class="stage-desc">Exploiting vulnerabilities to enter the target system</div></div></div>
+    <div class="stage"><div class="stage-num">04</div><div><div class="stage-name">Maintaining Access</div><div class="stage-desc">Establishing persistence in the system; creating a backdoor</div></div></div>
+    <div class="stage"><div class="stage-num">05</div><div><div class="stage-name">Covering Tracks</div><div class="stage-desc">Hiding activities to avoid detection by security teams</div></div></div>
+    <div class="stage"><div class="stage-num">06</div><div><div class="stage-name">Reporting</div><div class="stage-desc">Documenting findings and providing remediation recommendations</div></div></div>
+  </div>
+
+  <div class="section-title" style="font-size:18px; margin: 24px 0 14px; color: var(--cyan);">Kali Linux — Essential Commands</div>
+  <div class="qr">
+    <div class="qr-title">// NAVIGATION & FILE OPERATIONS</div>
+    <div class="qr-row"><span class="qr-cmd">ls</span><span class="qr-desc">List files in the current directory</span></div>
+    <div class="qr-row"><span class="qr-cmd">ls -l</span><span class="qr-desc">Detailed list with permissions, size, and date</span></div>
+    <div class="qr-row"><span class="qr-cmd">pwd</span><span class="qr-desc">Print the current working directory path</span></div>
+    <div class="qr-row"><span class="qr-cmd">cd /path/to/dir</span><span class="qr-desc">Change to a specific directory</span></div>
+    <div class="qr-row"><span class="qr-cmd">cd</span><span class="qr-desc">Return to the home directory</span></div>
+    <div class="qr-row"><span class="qr-cmd">mkdir folder</span><span class="qr-desc">Create a new directory</span></div>
+    <div class="qr-row"><span class="qr-cmd">mkdir -p a/{b,c,d}</span><span class="qr-desc">Create multiple nested directories at once</span></div>
+    <div class="qr-row"><span class="qr-cmd">touch file.txt</span><span class="qr-desc">Create an empty file</span></div>
+    <div class="qr-row"><span class="qr-cmd">cat file.txt</span><span class="qr-desc">Display the contents of a file</span></div>
+    <div class="qr-row"><span class="qr-cmd">echo "text" > file.txt</span><span class="qr-desc">Write text to a file (overwrites existing content)</span></div>
+    <div class="qr-row"><span class="qr-cmd">echo "text" >> file.txt</span><span class="qr-desc">Append text to the end of a file</span></div>
+    <div class="qr-row"><span class="qr-cmd">ls > list.txt</span><span class="qr-desc">Redirect ls output into a file</span></div>
+    <div class="qr-row"><span class="qr-cmd">cat < list.txt</span><span class="qr-desc">Read file using input redirection</span></div>
+    <div class="qr-row"><span class="qr-cmd">cmd1 | cmd2</span><span class="qr-desc">Pipe: pass output of cmd1 as input to cmd2</span></div>
+    <div class="qr-row"><span class="qr-cmd">sort file.txt</span><span class="qr-desc">Sort the contents of a file alphabetically</span></div>
+    <div class="qr-row"><span class="qr-cmd">history</span><span class="qr-desc">Show the command history log</span></div>
+    <div class="qr-row"><span class="qr-cmd">Ctrl+R</span><span class="qr-desc">Reverse search through command history</span></div>
+    <div class="qr-row"><span class="qr-cmd">man ls</span><span class="qr-desc">Show the manual page for a command</span></div>
+    <div class="qr-row"><span class="qr-cmd">which nmap</span><span class="qr-desc">Find the full path of a program in $PATH</span></div>
+    <div class="qr-row"><span class="qr-cmd">locate filename</span><span class="qr-desc">Fast file search using the locate database</span></div>
+    <div class="qr-row"><span class="qr-cmd">find / -name "sbd*"</span><span class="qr-desc">Flexible file search by name starting from root</span></div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- LECTURE 2 -->
+<div class="section" id="l2">
+  <div class="section-header">
+    <span class="section-num">LECTURE 02</span>
+    <span class="section-title">Gathering Information · OSINT</span>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="card-title">🔍 Passive Reconnaissance</div>
+      <ul>
+        <li>No direct interaction with the target</li>
+        <li>Harder to detect</li>
+        <li>Uses third-party data sources</li>
+        <li>Examples: Google Dorking, WHOIS, Shodan</li>
+        <li>Domain enumeration, Packet inspection</li>
+        <li>OSINT, Recon-ng, Eavesdropping</li>
+      </ul>
+    </div>
+    <div class="card orange">
+      <div class="card-title">⚡ Active Reconnaissance</div>
+      <ul>
+        <li>Direct interaction with the target</li>
+        <li>Easier to detect</li>
+        <li>Tools send probes directly to the target</li>
+        <li>Examples: Shodan (active), Nmap</li>
+        <li>Host / Network / User enumeration</li>
+        <li>Packet crafting, Service enumeration</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <tr><th>Feature</th><th>Passive</th><th>Active</th></tr>
+      <tr><td>Engagement</td><td>No direct contact with target</td><td>Direct contact with target</td></tr>
+      <tr><td>Detection</td><td>Harder to detect</td><td>Easier to detect</td></tr>
+      <tr><td>Sources</td><td>Third-party databases</td><td>Scanning tools, probes</td></tr>
+      <tr><td>Example</td><td>Google Dorking, WHOIS</td><td>Nmap, active Shodan</td></tr>
+    </table>
+  </div>
+
+  <div class="section-title" style="font-size:18px; margin: 24px 0 14px; color: var(--cyan);">OSINT Tools</div>
+
+  <div class="grid">
+    <div class="card green">
+      <div class="card-title">🔭 Shodan</div>
+      <p style="font-size:13px; margin-bottom:10px;">A search engine for internet-connected <strong>devices and services</strong> (servers, IoT, SCADA, cameras) — not websites.</p>
+      <ul>
+        <li><code style="color:var(--green); font-family:monospace;">webcamXP</code> — find exposed cameras</li>
+        <li><code style="color:var(--green); font-family:monospace;">port:22 country:KZ</code> — SSH in Kazakhstan</li>
+        <li><code style="color:var(--green); font-family:monospace;">org:"Jusan Mobile"</code> — by organization</li>
+        <li><code style="color:var(--green); font-family:monospace;">port:3389</code> — exposed RDP services</li>
+        <li><code style="color:var(--green); font-family:monospace;">apache country:KZ port:80</code></li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">🕸️ Maltego</div>
+      <p style="font-size:13px; margin-bottom:10px;">Visualizes relationships between people, domains, and IPs using <strong>Transforms</strong> — automated data source queries.</p>
+      <ul>
+        <li>Graph: entities (nodes) + relationships (edges)</li>
+        <li>Pivot: one data point expands into a full network</li>
+        <li>Sources: DNS, WHOIS, social media, data leaks</li>
+        <li>Used for cyber investigations and OSINT analysis</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">📡 theHarvester</div>
+      <p style="font-size:13px; margin-bottom:10px;">Collects emails, subdomains, IPs, and employee names from Google, Bing, and DNS.</p>
+      <div class="code-block">theHarvester <span class="flag">-d</span> <span class="value">example.com</span> <span class="flag">-b</span> <span class="value">google</span></div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="card-title">🌐 WHOIS</div>
+      <p style="font-size:13px; margin-bottom:10px;">Public database for looking up domain and IP ownership details.</p>
+      <ul>
+        <li>Domain owner: name, email, company</li>
+        <li>Registration and expiration dates</li>
+        <li>Hosting providers and IP addresses</li>
+        <li>Tool: <strong>who.is</strong></li>
+      </ul>
+    </div>
+    <div class="card yellow">
+      <div class="card-title">🔎 Google Dorking</div>
+      <p style="font-size:13px; margin-bottom:10px;">Advanced Google search operators to find hidden data, exposed files, and vulnerabilities.</p>
+      <ul>
+        <li><code style="color:var(--yellow); font-family:monospace;">filetype:pdf</code> — search for PDF files</li>
+        <li><code style="color:var(--yellow); font-family:monospace;">inurl:login</code> — find login pages</li>
+        <li><code style="color:var(--yellow); font-family:monospace;">intext:"password"</code> — word in page body</li>
+        <li><code style="color:var(--yellow); font-family:monospace;">intitle:"index of"</code> — open directory listings</li>
+        <li><code style="color:var(--yellow); font-family:monospace;">site:example.com</code> — search within a domain</li>
+        <li><code style="color:var(--yellow); font-family:monospace;">link:example.com</code> — pages linking to a domain</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">🤖 SpiderFoot</div>
+      <p style="font-size:13px; margin-bottom:10px;">Automated OSINT tool that collects and correlates data from many public sources.</p>
+      <ul>
+        <li>Launch: <code style="color:var(--cyan); font-family:monospace;">python3 sf.py -l 127.0.0.1:5001</code></li>
+        <li>Web-based interface for visualization</li>
+        <li>Automated recon from a single domain or IP</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="key-fact">
+    <strong>Google Dorking — Practice Examples:</strong><br>
+    <code style="color:var(--yellow);">filetype:pdf intext:"confidential"</code> — find confidential PDF files<br>
+    <code style="color:var(--yellow);">inurl:"view/view.shtml"</code> — publicly accessible cameras<br>
+    <code style="color:var(--yellow);">site:example.com inurl:admin</code> — admin login panels<br>
+    <code style="color:var(--yellow);">filetype:txt intext:"email"</code> — text files containing email lists
+  </div>
+
+  <div class="section-title" style="font-size:18px; margin: 24px 0 14px; color: var(--cyan);">Active Recon — Gobuster (Subdomain Brute Force)</div>
+  <div class="code-block">gobuster <span class="flag">dns</span> <span class="flag">-d</span> <span class="value">example.com</span> <span class="flag">-t</span> <span class="value">150</span> <span class="flag">-w</span> <span class="value">./subdomains-top1million-110000.txt</span></div>
+  <div class="qr">
+    <div class="qr-title">// PARAMETERS</div>
+    <div class="qr-row"><span class="qr-cmd">dns</span><span class="qr-desc">DNS enumeration mode</span></div>
+    <div class="qr-row"><span class="qr-cmd">-d</span><span class="qr-desc">Target domain to enumerate</span></div>
+    <div class="qr-row"><span class="qr-cmd">-t 150</span><span class="qr-desc">Number of concurrent threads (speed)</span></div>
+    <div class="qr-row"><span class="qr-cmd">-w</span><span class="qr-desc">Path to the wordlist file</span></div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- LECTURE 3 -->
+<div class="section" id="l3">
+  <div class="section-header">
+    <span class="section-num">LECTURE 03</span>
+    <span class="section-title">Network Scanning · Nmap · Zenmap · Masscan</span>
+  </div>
+
+  <div class="grid grid-3">
+    <div class="card green">
+      <div class="card-title">Nmap</div>
+      <ul>
+        <li>Industry-standard scanning tool</li>
+        <li>Port and service scanning</li>
+        <li>OS and version detection</li>
+        <li>NSE scripting engine</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">Zenmap</div>
+      <ul>
+        <li>GUI front-end for Nmap</li>
+        <li>Network topology visualization</li>
+        <li>Save and compare scan results</li>
+        <li>Pre-defined scan profiles</li>
+      </ul>
+    </div>
+    <div class="card orange">
+      <div class="card-title">Masscan</div>
+      <ul>
+        <li>Fastest port scanner available</li>
+        <li>Millions of packets per second</li>
+        <li>Can scan the entire IPv4 internet</li>
+        <li>Asynchronous scanning engine</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px; margin: 24px 0 14px; color: var(--cyan);">Nmap Scan Types</div>
+  <div class="table-wrap">
+    <table>
+      <tr><th>Command</th><th>Type</th><th>Description</th></tr>
+      <tr><td>nmap 192.168.1.1</td><td>Default Scan</td><td>Basic scan for open ports using default settings</td></tr>
+      <tr><td>nmap 192.168.1.1-100</td><td>Range Scan</td><td>Scan a range of IP addresses (1 to 100)</td></tr>
+      <tr><td>nmap 192.168.1.0/24</td><td>Subnet Scan</td><td>Scan all 256 addresses in the subnet</td></tr>
+      <tr><td>nmap -sn 192.168.1.0/24</td><td>Ping Scan</td><td>Discover live hosts without checking ports</td></tr>
+      <tr><td>nmap -p 22,80,443 IP</td><td>Port Scan</td><td>Check only the specified ports</td></tr>
+      <tr><td>nmap -p- IP</td><td>Full Scan</td><td>Scan all 65,535 ports</td></tr>
+      <tr><td>nmap -sS IP</td><td>SYN Stealth</td><td>Stealthy scan — does not complete the TCP handshake</td></tr>
+      <tr><td>nmap -sU -p 53,161 IP</td><td>UDP Scan</td><td>Scan UDP ports (DNS=53, SNMP=161)</td></tr>
+      <tr><td>nmap -O IP</td><td>OS Detection</td><td>Attempt to detect the target operating system</td></tr>
+      <tr><td>nmap -sV IP</td><td>Version Det.</td><td>Detect service names and version numbers</td></tr>
+      <tr><td>nmap -A IP</td><td>Aggressive</td><td>OS + versions + NSE scripts + traceroute combined</td></tr>
+      <tr><td>nmap -Pn IP</td><td>No Ping</td><td>Skip host discovery; scan even if no ping response</td></tr>
+      <tr><td>nmap --script=default IP</td><td>NSE Default</td><td>Run default NSE scripts for extra information</td></tr>
+      <tr><td>nmap --script=vuln IP</td><td>NSE Vuln</td><td>Run CVE-based vulnerability detection scripts</td></tr>
+      <tr><td>nmap -oN file.txt IP</td><td>Output Normal</td><td>Save scan results to a plain text file</td></tr>
+      <tr><td>nmap -oX file.xml IP</td><td>Output XML</td><td>Save scan results in XML format</td></tr>
+    </table>
+  </div>
+
+  <div class="key-fact">
+    <strong>How TCP SYN Scan (-sS) works:</strong><br>
+    Nmap sends a SYN packet and checks the response:<br>
+    • <strong>SYN-ACK received</strong> → port is OPEN<br>
+    • <strong>RST received</strong> → port is CLOSED<br>
+    • <strong>No reply</strong> → port is FILTERED (firewall is blocking)
+  </div>
+
+  <div class="section-title" style="font-size:18px; margin: 24px 0 14px; color: var(--cyan);">Bypassing Firewalls and IDS</div>
+  <div class="grid">
+    <div class="card">
+      <div class="card-title">1. Decoy Scanning (-D)</div>
+      <p style="font-size:13px;">Makes it appear that multiple hosts are scanning the target, making it hard to identify the real attacker.</p>
+      <div class="code-block">nmap <span class="flag">-sS -D</span> <span class="value">RND:10</span> 192.168.1.1
+nmap <span class="flag">-sS -D</span> <span class="value">192.168.1.100,ME</span> 192.168.1.1</div>
+    </div>
+    <div class="card">
+      <div class="card-title">2. Packet Fragmentation (-f)</div>
+      <p style="font-size:13px;">Splits packets into tiny fragments — IDS/IPS may miss fragmented traffic that it would block in full form.</p>
+      <div class="code-block">nmap <span class="flag">-sS -f</span> 192.168.1.1</div>
+    </div>
+    <div class="card">
+      <div class="card-title">3. Source IP Spoofing (-S)</div>
+      <p style="font-size:13px;">Tricks the target into thinking the scan originates from a different IP address.</p>
+      <div class="code-block">nmap <span class="flag">-S</span> <span class="value">192.168.1.100</span> <span class="flag">-e</span> <span class="value">eth0</span> 192.168.1.1</div>
+    </div>
+    <div class="card">
+      <div class="card-title">4. Source Port Spoofing</div>
+      <p style="font-size:13px;">Mimics DNS (53) or HTTPS (443) traffic to pass through firewalls that allow those service ports.</p>
+      <div class="code-block">nmap <span class="flag">-sS -p</span> <span class="value">80</span> <span class="flag">--source-port</span> <span class="value">53</span> 192.168.1.1</div>
+    </div>
+    <div class="card">
+      <div class="card-title">5. Idle / Zombie Scan (-sI)</div>
+      <p style="font-size:13px;">Uses a zombie host as a relay — the target sees the zombie's IP instead of the real attacker's.</p>
+      <div class="code-block">nmap <span class="flag">-sI</span> <span class="value">192.168.1.100</span> 192.168.1.1</div>
+    </div>
+    <div class="card">
+      <div class="card-title">6. IPv6 Scanning</div>
+      <p style="font-size:13px;">Many firewalls focus on IPv4 filtering but may completely ignore IPv6 traffic.</p>
+      <div class="code-block">nmap <span class="flag">-6 -sS</span> <span class="value">fe80::1</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px; margin: 24px 0 14px; color: var(--cyan);">NSE Script Categories</div>
+  <div class="table-wrap">
+    <table>
+      <tr><th>Category</th><th>Description</th></tr>
+      <tr><td>Auth</td><td>Tests authentication mechanisms, brute-force attempts, and bypass techniques</td></tr>
+      <tr><td>Vuln</td><td>Checks for known vulnerabilities (CVE-based detection)</td></tr>
+      <tr><td>Broadcast</td><td>Discovers hosts on the network not explicitly specified</td></tr>
+      <tr><td>Brute</td><td>Performs password brute-force attacks on network services</td></tr>
+      <tr><td>Exploit</td><td>Targets known vulnerabilities for potential exploitation</td></tr>
+      <tr><td>Fuzzer</td><td>Tests services by sending unexpected or malformed inputs</td></tr>
+    </table>
+  </div>
+
+  <div class="key-fact">
+    <strong>TCP vs UDP:</strong><br>
+    <strong>TCP</strong> — reliable, confirms delivery, slower. Three-way handshake: SYN → SYN-ACK → ACK. Like tracked parcel delivery.<br>
+    <strong>UDP</strong> — fast, no confirmation, packets can be lost. Used for DNS (port 53) and SNMP (port 161). Like shouting — no guarantee it's heard.
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- LECTURE 4 -->
+<div class="section" id="l4">
+  <div class="section-header">
+    <span class="section-num">LECTURE 04</span>
+    <span class="section-title">Network Hacking · WPA/WPA2 Cracking · WiFi</span>
+  </div>
+
+  <div class="key-fact">
+    <strong>Requirements for WiFi hacking:</strong> 1) Your own wireless access point (never attack someone else's — it is illegal and unethical). 2) A wireless adapter that supports packet injection and monitor mode.
+  </div>
+
+  <div class="section-title" style="font-size:18px; margin: 24px 0 14px; color: var(--cyan);">WiFi Encryption Types</div>
+  <div class="grid">
+    <div class="card red">
+      <div class="card-title">🔓 OPN (Open Network)</div>
+      <ul>
+        <li>NO encryption whatsoever</li>
+        <li>All data transmitted in plaintext</li>
+        <li>All traffic can be intercepted and read</li>
+        <li>Common in cafes, airports, hotels</li>
+        <li>HTTP POST credentials, cookies — all visible</li>
+      </ul>
+    </div>
+    <div class="card orange">
+      <div class="card-title">⚠️ WEP (Wired Equivalent Privacy)</div>
+      <ul>
+        <li>Outdated standard — CRITICALLY INSECURE</li>
+        <li>Uses RC4 algorithm with small key sizes</li>
+        <li>Reuses Initialization Vectors (IVs) — fatal flaw</li>
+        <li>Crackable in minutes with aircrack-ng</li>
+        <li>Needs ~20,000–60,000 IVs to crack</li>
+      </ul>
+    </div>
+    <div class="card yellow">
+      <div class="card-title">🔒 WPA2 (Wi-Fi Protected Access 2)</div>
+      <ul>
+        <li>AES-CCMP protocol — strong encryption</li>
+        <li>PSK (pre-shared key) or Enterprise (MGT)</li>
+        <li>Cannot be cracked directly</li>
+        <li>Requires a captured handshake + dictionary attack</li>
+        <li>Security depends entirely on password strength</li>
+      </ul>
+    </div>
+    <div class="card green">
+      <div class="card-title">🛡️ WPA3 (Latest Standard)</div>
+      <ul>
+        <li>SAE — Simultaneous Authentication of Equals</li>
+        <li>"Dragonfly handshake" — prevents offline attacks</li>
+        <li>Forward secrecy — past captured traffic stays safe</li>
+        <li>Enforces protected management frames</li>
+        <li>Not fully immune — misconfiguration still a risk</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px; margin: 24px 0 14px; color: var(--cyan);">Aircrack-ng Suite Tools</div>
+  <div class="grid">
+    <div class="card">
+      <div class="card-title">airmon-ng</div>
+      <p style="font-size:13px; margin-bottom:10px;">Switches the wireless adapter into Monitor Mode, allowing it to capture all wireless traffic in range.</p>
+      <div class="code-block">airmon-ng start wlan0
+<span class="comment"># Creates interface wlan0mon</span>
+airmon-ng check kill
+<span class="comment"># Stop processes that interfere</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">airodump-ng</div>
+      <p style="font-size:13px; margin-bottom:10px;">Scans and captures WiFi traffic. Shows nearby networks, connected clients, and captured handshakes.</p>
+      <div class="code-block">airodump-ng wlan0mon
+<span class="comment"># Scan all nearby networks</span>
+airodump-ng <span class="flag">-c</span> <span class="value">6</span> <span class="flag">--bssid</span> <span class="value">AA:BB:CC:DD:EE:FF</span> <span class="flag">-w</span> <span class="value">capture</span> wlan0mon</div>
+    </div>
+    <div class="card">
+      <div class="card-title">aireplay-ng</div>
+      <p style="font-size:13px; margin-bottom:10px;">Sends deauth packets to forcibly disconnect clients from an AP, causing them to reconnect and generating a handshake.</p>
+      <div class="code-block">aireplay-ng <span class="flag">-0</span> <span class="value">20</span> <span class="flag">-a</span> <span class="value">AA:BB:CC:DD:EE:FF</span> wlan0mon
+<span class="comment"># -0 = deauth mode, 20 = packet count</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">aircrack-ng</div>
+      <p style="font-size:13px; margin-bottom:10px;">Performs a dictionary attack on a captured WPA/WPA2 handshake, or statistically cracks WEP from collected IVs.</p>
+      <div class="code-block"><span class="comment"># WPA2 dictionary attack</span>
+aircrack-ng <span class="flag">-w</span> <span class="value">/root/rockyou-top100000.txt</span> <span class="flag">-b</span> <span class="value">AA:BB:CC</span> capture.cap
+<span class="comment"># WEP statistical crack</span>
+aircrack-ng wpa_capture-04.cap</div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px; margin: 24px 0 14px; color: var(--cyan);">Step-by-Step Attack Processes</div>
+
+  <div class="card" style="margin-bottom:16px;">
+    <div class="card-title" style="color:var(--red);">⚠️ WPA2 Cracking — Full Process</div>
+    <div class="stages" style="margin-top:10px;">
+      <div class="stage"><div class="stage-num">1</div><div><div class="stage-name">Enable Monitor Mode</div><div class="stage-desc"><code style="color:var(--green); font-family:monospace;">airmon-ng start wlan0</code> → creates wlan0mon interface</div></div></div>
+      <div class="stage"><div class="stage-num">2</div><div><div class="stage-name">Scan for Networks</div><div class="stage-desc"><code style="color:var(--green); font-family:monospace;">airodump-ng wlan0mon</code> → note BSSID, Channel, ESSID of target</div></div></div>
+      <div class="stage"><div class="stage-num">3</div><div><div class="stage-name">Capture Target Traffic</div><div class="stage-desc"><code style="color:var(--green); font-family:monospace;">airodump-ng -c 6 --bssid [BSSID] -w capture wlan0mon</code></div></div></div>
+      <div class="stage"><div class="stage-num">4</div><div><div class="stage-name">Deauth Attack (separate terminal)</div><div class="stage-desc"><code style="color:var(--green); font-family:monospace;">aireplay-ng -0 20 -a [BSSID] wlan0mon</code> → wait for STATION and WPA handshake (EAPOL)</div></div></div>
+      <div class="stage"><div class="stage-num">5</div><div><div class="stage-name">Dictionary Attack on Handshake</div><div class="stage-desc"><code style="color:var(--green); font-family:monospace;">aircrack-ng -w /root/rockyou-top100000.txt -b [BSSID] capture.cap</code> → KEY FOUND!</div></div></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px;">
+    <div class="card-title" style="color:var(--orange);">⚠️ WEP Cracking — Process</div>
+    <div class="stages" style="margin-top:10px;">
+      <div class="stage"><div class="stage-num">1</div><div><div class="stage-name">Monitor Mode + Scan</div><div class="stage-desc">Find a WEP network — look for ENC column showing "WEP WEP"</div></div></div>
+      <div class="stage"><div class="stage-num">2</div><div><div class="stage-name">Capture Packets</div><div class="stage-desc"><code style="color:var(--green); font-family:monospace;">airodump-ng -c 3 --bssid [BSSID] -w capture wlan0mon</code></div></div></div>
+      <div class="stage"><div class="stage-num">3</div><div><div class="stage-name">Collect IVs (20,000–60,000+)</div><div class="stage-desc">Run airodump + aireplay simultaneously. More IVs = higher probability of cracking.</div></div></div>
+      <div class="stage"><div class="stage-num">4</div><div><div class="stage-name">Crack the Key</div><div class="stage-desc"><code style="color:var(--green); font-family:monospace;">aircrack-ng capture.cap</code> → KEY FOUND! [11:BB:33:CD:55] (hex format)</div></div></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px;">
+    <div class="card-title" style="color:var(--muted);">OPN Network — Traffic Analysis with Wireshark</div>
+    <div class="stages" style="margin-top:10px;">
+      <div class="stage"><div class="stage-num">1</div><div><div class="stage-name">Capture OPN Traffic</div><div class="stage-desc"><code style="color:var(--green); font-family:monospace;">airodump-ng -c 6 --bssid [OPN_BSSID] -w capture wlan0mon</code></div></div></div>
+      <div class="stage"><div class="stage-num">2</div><div><div class="stage-name">Open in Wireshark</div><div class="stage-desc"><code style="color:var(--green); font-family:monospace;">wireshark capture-01.cap</code></div></div></div>
+      <div class="stage"><div class="stage-num">3</div><div><div class="stage-name">Apply Filters to Find Sensitive Data</div><div class="stage-desc"><code style="color:var(--cyan); font-family:monospace;">http.request.method == "POST"</code> — find login credentials<br><code style="color:var(--cyan); font-family:monospace;">http.cookie</code> — find session cookies (PHPSESSID)<br><code style="color:var(--cyan); font-family:monospace;">http</code>, <code style="color:var(--cyan); font-family:monospace;">dns</code>, <code style="color:var(--cyan); font-family:monospace;">ftp</code> — other protocol filters</div></div></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px; margin: 24px 0 14px; color: var(--cyan);">airodump-ng Output — Column Reference</div>
+  <div class="table-wrap">
+    <table>
+      <tr><th>Column</th><th>Description</th></tr>
+      <tr><td>BSSID</td><td>MAC address of the access point</td></tr>
+      <tr><td>PWR</td><td>Signal strength (closer to 0 = stronger signal)</td></tr>
+      <tr><td>Beacons</td><td>Number of beacon frames received from the AP</td></tr>
+      <tr><td>#Data</td><td>Number of data packets captured</td></tr>
+      <tr><td>CH</td><td>WiFi channel number</td></tr>
+      <tr><td>ENC</td><td>Encryption type: OPN / WEP / WPA2 / WPA3</td></tr>
+      <tr><td>CIPHER</td><td>Cipher algorithm: CCMP (AES) or WEP</td></tr>
+      <tr><td>AUTH</td><td>Authentication method: PSK / MGT / SAE / OWE</td></tr>
+      <tr><td>ESSID</td><td>Network name (SSID)</td></tr>
+      <tr><td>STATION</td><td>MAC address of a connected client device</td></tr>
+      <tr><td>Rate</td><td>Data transmission rate between client and AP</td></tr>
+      <tr><td>Lost</td><td>Number of packets lost from the client</td></tr>
+      <tr><td>Frames</td><td>Total number of frames captured from the client</td></tr>
+      <tr><td>Probes</td><td>Networks the client is actively looking for (probe requests)</td></tr>
+    </table>
+  </div>
+
+  <div class="warn">
+    <strong>Deauthentication Attack goal:</strong> Disconnect clients from the AP, force them to reconnect, and capture the WPA handshake during reconnection. When you see <strong>EAPOL</strong> in the Notes column of airodump-ng — the handshake was successfully captured.
+  </div>
+
+  <div class="key-fact">
+    <strong>ip a and iwconfig:</strong><br>
+    <code style="color:var(--green);">ip a</code> — display all network interfaces with their IP addresses<br>
+    <code style="color:var(--green);">/sbin/iwconfig</code> — display wireless interfaces (wlan0, wlan1, wlan2…)<br>
+    Interfaces lo, eth0, docker0 — NOT wireless; cannot be used for WiFi attacks<br>
+    IEEE 802.11, Mode: Managed = a valid wireless interface ready to use
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- COMMAND REFERENCE -->
+<div class="section" id="cmdref">
+  <div class="section-header">
+    <span class="section-num">QUICK REF</span>
+    <span class="section-title">Command Reference</span>
+  </div>
+
+  <div class="qr">
+    <div class="qr-title">// AIRCRACK-NG SUITE — COMPLETE REFERENCE</div>
+    <div class="qr-row"><span class="qr-cmd">airmon-ng start wlan0</span><span class="qr-desc">Enable monitor mode → creates wlan0mon</span></div>
+    <div class="qr-row"><span class="qr-cmd">airmon-ng check kill</span><span class="qr-desc">Stop interfering processes (NetworkManager, wpa_supplicant)</span></div>
+    <div class="qr-row"><span class="qr-cmd">airodump-ng wlan0mon</span><span class="qr-desc">Scan all nearby WiFi networks</span></div>
+    <div class="qr-row"><span class="qr-cmd">airodump-ng wlan0mon -w scan --manufacturer --wps --band abg</span><span class="qr-desc">Scan + save + vendor info + WPS + 2.4 &amp; 5 GHz bands</span></div>
+    <div class="qr-row"><span class="qr-cmd">airodump-ng -c 6 --bssid AA:BB:CC -w capture wlan0mon</span><span class="qr-desc">Capture traffic from a specific network on channel 6</span></div>
+    <div class="qr-row"><span class="qr-cmd">aireplay-ng -0 20 -a AA:BB:CC wlan0mon</span><span class="qr-desc">Deauth attack: send 20 deauthentication packets to the AP</span></div>
+    <div class="qr-row"><span class="qr-cmd">aircrack-ng -w rockyou.txt -b AA:BB:CC capture.cap</span><span class="qr-desc">Dictionary attack against a WPA2 handshake</span></div>
+    <div class="qr-row"><span class="qr-cmd">aircrack-ng capture.cap</span><span class="qr-desc">Statistical WEP key crack using collected IVs</span></div>
+    <div class="qr-row"><span class="qr-cmd">wireshark capture-01.cap</span><span class="qr-desc">Open captured packets in Wireshark for analysis</span></div>
+  </div>
+
+  <div class="qr" style="margin-top:16px;">
+    <div class="qr-title">// NMAP — KEY COMMANDS</div>
+    <div class="qr-row"><span class="qr-cmd">nmap 192.168.1.1</span><span class="qr-desc">Basic default scan</span></div>
+    <div class="qr-row"><span class="qr-cmd">nmap -sn 192.168.1.0/24</span><span class="qr-desc">Ping scan — discover live hosts in the subnet</span></div>
+    <div class="qr-row"><span class="qr-cmd">nmap -sS 192.168.1.1</span><span class="qr-desc">SYN stealth scan</span></div>
+    <div class="qr-row"><span class="qr-cmd">nmap -sV -O -A 192.168.1.1</span><span class="qr-desc">Service versions + OS detection + aggressive mode</span></div>
+    <div class="qr-row"><span class="qr-cmd">nmap -p- 192.168.1.1</span><span class="qr-desc">Scan all 65,535 ports</span></div>
+    <div class="qr-row"><span class="qr-cmd">nmap -Pn 192.168.1.1</span><span class="qr-desc">Skip ping — scan even if ICMP is blocked by firewall</span></div>
+    <div class="qr-row"><span class="qr-cmd">nmap --script=vuln 192.168.1.1</span><span class="qr-desc">Run NSE vulnerability detection scripts</span></div>
+    <div class="qr-row"><span class="qr-cmd">nmap -sS -D RND:10 192.168.1.1</span><span class="qr-desc">Decoy scan using 10 random fake source IPs</span></div>
+    <div class="qr-row"><span class="qr-cmd">nmap -oN result.txt 192.168.1.1</span><span class="qr-desc">Save scan output to a text file</span></div>
+    <div class="qr-row"><span class="qr-cmd">sudo nmap -sV -sS -sC -n -T4 --min-rate 3000 -p- [IP]</span><span class="qr-desc">Full comprehensive scan (from Lecture 2)</span></div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- CHEATSHEET -->
+<div class="section" id="cheatsheet">
+  <div class="section-header">
+    <span class="section-num">EXAM PREP</span>
+    <span class="section-title">Key Facts · Exam Cheatsheet</span>
+  </div>
+
+  <div class="grid">
+    <div class="card yellow">
+      <div class="card-title">📌 Must-Know Facts</div>
+      <ul>
+        <li>WEP is cracked via IVs — need 20k–60k+ to succeed</li>
+        <li>WPA2 is cracked via handshake + wordlist dictionary</li>
+        <li>OPN = no encryption, entire traffic is visible</li>
+        <li>Monitor mode: wlan0 → wlan0mon</li>
+        <li>Deauth flag = -0 &nbsp;|&nbsp; Dictionary flag = -w in aircrack</li>
+        <li>EAPOL in airodump Notes = handshake captured</li>
+        <li>WPA3 uses SAE (the Dragonfly handshake)</li>
+        <li>Passive recon is harder to detect than active</li>
+        <li>OSINT = gathering only publicly available data</li>
+        <li>Shodan indexes devices, not websites</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">🌐 Ports to Know</div>
+      <ul>
+        <li><strong>22</strong> — SSH</li>
+        <li><strong>23</strong> — Telnet</li>
+        <li><strong>25</strong> — SMTP (email)</li>
+        <li><strong>53</strong> — DNS (UDP)</li>
+        <li><strong>80</strong> — HTTP</li>
+        <li><strong>161</strong> — SNMP (UDP)</li>
+        <li><strong>443</strong> — HTTPS</li>
+        <li><strong>3389</strong> — RDP (Remote Desktop)</li>
+      </ul>
+    </div>
+    <div class="card green">
+      <div class="card-title">🔑 6 Pen Testing Stages</div>
+      <ul>
+        <li><strong>1.</strong> Reconnaissance</li>
+        <li><strong>2.</strong> Scanning</li>
+        <li><strong>3.</strong> Gaining Access</li>
+        <li><strong>4.</strong> Maintaining Access</li>
+        <li><strong>5.</strong> Covering Tracks</li>
+        <li><strong>6.</strong> Reporting</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">🛠️ Tools by Topic</div>
+      <ul>
+        <li><strong>OSINT:</strong> Shodan, Maltego, theHarvester, SpiderFoot</li>
+        <li><strong>Network:</strong> Nmap, Zenmap, Masscan, Gobuster</li>
+        <li><strong>WiFi:</strong> airmon-ng, airodump-ng, aireplay-ng, aircrack-ng</li>
+        <li><strong>Analysis:</strong> Wireshark</li>
+        <li><strong>Wordlists:</strong> rockyou-top100000.txt</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">📋 WiFiChallenge Lab — Quick Reference</div>
+    <div class="qr" style="margin-top:10px; padding:14px;">
+      <div class="qr-row"><span class="qr-cmd">Login:</span><span class="qr-desc">user / user</span></div>
+      <div class="qr-row"><span class="qr-cmd">Tools directory:</span><span class="qr-desc">/root/tools/</span></div>
+      <div class="qr-row"><span class="qr-cmd">Wordlist:</span><span class="qr-desc">/root/rockyou-top100000.txt</span></div>
+      <div class="qr-row"><span class="qr-cmd">restartWiFi.sh</span><span class="qr-desc">Restart and restore all default AP and client configurations</span></div>
+      <div class="qr-row"><span class="qr-cmd">Max wait time:</span><span class="qr-desc">3–5 minutes between automations and connections</span></div>
+      <div class="qr-row"><span class="qr-cmd">In-scope networks:</span><span class="qr-desc">wifi-guest, wifi-corp, wifi-global, wifi-regional, wifi-old, wifi-mobile, wifi-IT, wifi-event, and more</span></div>
+    </div>
+  </div>
+
+  <div class="warn" style="margin-top:20px;">
+    <strong>⚖️ Ethics &amp; Legality:</strong> Everything covered in this course must only be practiced on your own systems or in designated lab environments such as WiFiChallenge Lab. Attacking networks without explicit authorization is illegal. Penetration testing always requires written permission from the system owner!
+  </div>
+</div>
+
+</div><!-- /container -->
+
+</body>
+</html>
